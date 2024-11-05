@@ -43,7 +43,6 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
-  // private final ADIS16470_IMU pigeon = new ADIS16470_IMU();
   private final Pigeon2 pigeon = new Pigeon2(DriveConstants.pigeon2CanId);
 
   // Slew rate filter variables for controlling lateral acceleration
