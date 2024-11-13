@@ -27,9 +27,10 @@ public class PathPlannerUtils {
     private double latestTimestamp;
     private SwerveDriveOdometry odometry;
 
-    public PathPlannerUtils(DriveSubsystem subsystem, Pigeon2 pigeon) {
+    public PathPlannerUtils(DriveSubsystem subsystem, Pigeon2 pigeon, SwerveDriveOdometry odometry) {
         this.subsystem = subsystem;
         this.pigeon = pigeon;
+        this.odometry = odometry;
 
         // Load the RobotConfig from the GUI settings. You should probably
         // store this in your Constants file
