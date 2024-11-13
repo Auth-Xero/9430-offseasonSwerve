@@ -2,12 +2,21 @@ package frc.utils;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PPLTVController;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.DriveFeedforward;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class PathPlannerUtils {
@@ -15,6 +24,11 @@ public class PathPlannerUtils {
     private DriveSubsystem subsystem;
     private Pigeon2 pigeon;
     private RobotConfig config;
+    private Pose2d prevPose2d;
+    private Pose2d latestPose2d;
+    private double prevTimestamp;
+    private double latestTimestamp;
+    private SwerveDriveOdometry odometry;
 
     public PathPlannerUtils(DriveSubsystem subsystem, Pigeon2 pigeon) {
         this.subsystem = subsystem;
@@ -58,13 +72,26 @@ public class PathPlannerUtils {
     }
 
     public Pose2d getPose() {
-        return new Pose2d();
+        return odometry.getPoseMeters();
     }
 
-    public void resetPose(Pose2d pose) {}
+    public void resetPose(Pose2d pose) {
+        prevPose2d = latestPose2d;
+        latestPose2d = pose;
+        prevTimestamp = latestTimestamp;
+        latestTimestamp = Timer.getFPGATimestamp();
+        pigeon.reset();
+    }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return new ChassisSpeeds();
+
+
+        double dt = latestTimestamp - prevTimestamp;
+        double dx = (latestPose2d.getX() - prevPose2d.getX()) / dt;
+        double dy = (latestPose2d.getY() - prevPose2d.getY()) / dt;
+        double da = (latestPose2d.getRotation().getRadians() - prevPose2d.getRotation().getRadians()) / dt;
+
+        return new ChassisSpeeds(dx, dy, da);
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {}
