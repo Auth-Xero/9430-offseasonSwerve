@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
@@ -33,11 +34,11 @@ public class PathPlannerUtils {
         // Load the RobotConfig from the GUI settings. You should probably
         // store this in your Constants file
         config = null;
-        try{
-        config = RobotConfig.fromGUISettings();
+        try {
+            config = RobotConfig.fromGUISettings();
         } catch (Exception e) {
-        // Handle exception as needed
-        e.printStackTrace();
+            // Handle exception as needed
+            e.printStackTrace();
         }
 
         // Configure AutoBuilder last
@@ -45,22 +46,26 @@ public class PathPlannerUtils {
                 this::getPose, // Robot pose supplier
                 this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
                 this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT
+                                                                      // RELATIVE ChassisSpeeds. Also optionally outputs
+                                                                      // individual module feedforwards
+                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for
+                                                // holonomic drive trains
                         new com.pathplanner.lib.config.PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                         new com.pathplanner.lib.config.PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
                 ),
                 config, // The robot configuration
                 () -> {
-                // Boolean supplier that controls when the path will be mirrored for the red alliance
-                // This will flip the path being followed to the red side of the field.
-                // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                    // Boolean supplier that controls when the path will be mirrored for the red
+                    // alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
                 },
                 subsystem // Reference to this subsystem to set requirements
         );
@@ -81,7 +86,6 @@ public class PathPlannerUtils {
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
 
-
         double dt = latestTimestamp - prevTimestamp;
         double dx = (latestPose2d.getX() - prevPose2d.getX()) / dt;
         double dy = (latestPose2d.getY() - prevPose2d.getY()) / dt;
@@ -91,7 +95,8 @@ public class PathPlannerUtils {
     }
 
     public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, getPose().getRotation());
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds.vxMetersPerSecond,
+                chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, getPose().getRotation());
 
         speeds = ChassisSpeeds.discretize(speeds, 0.2);
         SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
@@ -99,5 +104,4 @@ public class PathPlannerUtils {
         subsystem.setModuleStates(swerveModuleStates);
     }
 
-    
 }
