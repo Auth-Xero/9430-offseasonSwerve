@@ -7,6 +7,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PPLTVController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforward;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -96,34 +97,38 @@ public class PathPlannerUtils {
     public void driveRobotRelative(ChassisSpeeds speeds) {}
     public void driveRobotRelative(ChassisSpeeds speeds, DriveFeedforward[] driveFeed) {}
 
+    // Assuming this is a method in your drive subsystem
     public Command followPathCommand(String pathName) {
-        try{
-            PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-    
-            return new FollowPathCommand(
-                    path,
-                    this::getPose, // Robot pose supplier
-                    this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-                    this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
-                    new PPLTVController(0.02), // PPLTVController is the built in path following controller for differential drive trains
-                    config, // The robot configuration
-                    () -> {
-                      // Boolean supplier that controls when the path will be mirrored for the red alliance
-                      // This will flip the path being followed to the red side of the field.
-                      // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-    
-                      var alliance = DriverStation.getAlliance();
-                      if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
-                      }
-                      return false;
-                    },
-                    subsystem // Reference to this subsystem to set requirements
-            );
-        } catch (Exception e) {
-            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-            return Commands.none();
-        }
-      }
+    try{
+        PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+
+        return new FollowPathCommand(
+                path,
+                this::getPose, // Robot pose supplier
+                this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+                this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds, AND feedforwards
+                new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+                ),
+                config, // The robot configuration
+                () -> {
+                  // Boolean supplier that controls when the path will be mirrored for the red alliance
+                  // This will flip the path being followed to the red side of the field.
+                  // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+                  var alliance = DriverStation.getAlliance();
+                  if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                  }
+                  return false;
+                },
+                subsystem // Reference to this subsystem to set requirements
+        );
+    } catch (Exception e) {
+        DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+        return Commands.none();
+    }
+  }
     
 }
