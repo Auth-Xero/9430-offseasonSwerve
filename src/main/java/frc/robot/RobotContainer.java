@@ -130,14 +130,25 @@ public class RobotContainer {
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
 
+  /**
+   * Updates SmartDashboard
+   */
   public void updateSmardDashboard() {
     dashboard.updateDashboard();
   }
 
+  /**
+   * Get the DriveSubsystem
+   * @return DriveSubsystem
+   */
   public DriveSubsystem getDriveSubsystem() {
     return m_robotDrive;
   }
 
+  /**
+   * Get the diverXboxController
+   * @return XboxController of diver
+   */
   public XboxController getDriverController() {
     return m_driverController;
   }

@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
 
-/** Add your docs here. */
+/** Where all SmartDashbard vales will be edited */
 public class SmartDashboardUtils {
 
     private RobotContainer robotContainer;
@@ -19,10 +19,17 @@ public class SmartDashboardUtils {
     private XboxController driverController;
     private Pigeon2 pigeon;
 
+    /**
+     * Constructor for SmartDashboardUtils
+     * @param robotContainer 
+     */
     public SmartDashboardUtils(RobotContainer robotContainer) {
         this.robotContainer = robotContainer;
     }
 
+    /**
+     * Initializes the values for the SmartDashboard and gets all required instances
+     */
     public void dashboardInit() {
         try{
             driveSubsystem = robotContainer.getDriveSubsystem();
@@ -37,6 +44,9 @@ public class SmartDashboardUtils {
         }
     }
 
+    /**
+     * Updates the values on the SmartDashboard
+     */
     public void updateDashboard() {
         try{
             SmartDashboard.putString("Controller A button", driverController.getAButton() ? "Pressed" : "");
