@@ -20,6 +20,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.utils.SmartDashboardUtils;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -40,13 +41,15 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  SmartDashboardUtils dashboard;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-    SmartDashboard.putString("A Button", "" + m_driverController.getAButton());
-
+    dashboard = new SmartDashboardUtils(this);
+    dashboard.dashboardInit();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -79,9 +82,6 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    new JoystickButton(m_driverController, XboxController.Button.kA.value)
-        .onTrue(new InstantCommand(() -> SmartDashboard.putString("A Button", "" + m_driverController.getAButton())))
-        .onFalse(new InstantCommand(() -> SmartDashboard.putString("A Button", "" + m_driverController.getAButton())));
   }
 
   /**
@@ -129,4 +129,17 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
+
+  public void updateSmardDashboard() {
+    dashboard.updateDashboard();
+  }
+
+  public DriveSubsystem getDriveSubsystem() {
+    return m_robotDrive;
+  }
+
+  public XboxController getDriverController() {
+    return m_driverController;
+  }
+
 }
