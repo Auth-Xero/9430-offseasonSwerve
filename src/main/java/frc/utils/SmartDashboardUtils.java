@@ -6,7 +6,9 @@ package frc.utils;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
@@ -19,9 +21,13 @@ public class SmartDashboardUtils {
     private XboxController driverController;
     private Pigeon2 pigeon;
 
+    private double startTime;
+    private double upTime;
+
     /**
      * Constructor for SmartDashboardUtils
-     * @param robotContainer 
+     * 
+     * @param robotContainer
      */
     public SmartDashboardUtils(RobotContainer robotContainer) {
         this.robotContainer = robotContainer;
@@ -31,15 +37,33 @@ public class SmartDashboardUtils {
      * Initializes the values for the SmartDashboard and gets all required instances
      */
     public void dashboardInit() {
-        try{
+        try {
             driveSubsystem = robotContainer.getDriveSubsystem();
             pigeon = driveSubsystem.getPigeon2();
             driverController = robotContainer.getDriverController();
 
-            SmartDashboard.putString("Controller A button", "");
-            SmartDashboard.putString("Pigeon2 Rate", "");
-        }
-        catch(Exception e){
+            // Driver Controller Values
+            SmartDashboard.putBoolean("Driver Controller A button", false);
+
+            // Pigeon2 Gyro
+            SmartDashboard.putNumber("Pigeon2 Rate", 0);
+            SmartDashboard.putNumber("Pigeon2 Angle", 0);
+
+            // Input Testing
+            SmartDashboard.putNumber("Input Test Num", 0);
+            SmartDashboard.putNumber("Output Test Num", 0);
+            SmartDashboard.putBoolean("Input Test Bool", false);
+            SmartDashboard.putBoolean("Output Test Bool", false);
+            SmartDashboard.putString("Input Test String", "");
+            SmartDashboard.putString("Output Test String", "");
+
+            // Uptime
+            startTime = Timer.getFPGATimestamp();
+            SmartDashboard.putNumber("Uptime", 0);
+
+            // LiveWindow
+            LiveWindow.setEnabled(true);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -48,11 +72,26 @@ public class SmartDashboardUtils {
      * Updates the values on the SmartDashboard
      */
     public void updateDashboard() {
-        try{
-            SmartDashboard.putString("Controller A button", driverController.getAButton() ? "Pressed" : "");
-            SmartDashboard.putString("Pigeon2 Rate", ""+pigeon.getRate());
-        }
-        catch(Exception e){
+        try {
+            // Driver Controller Values
+            SmartDashboard.putBoolean("Driver Controller A button", driverController.getAButton());
+
+            // Pigeon2 Gyro
+            SmartDashboard.putNumber("Pigeon2 Rate", pigeon.getRate());
+            SmartDashboard.putNumber("Pigeon2 Angle", pigeon.getAngle());
+
+            // Input Testing
+            SmartDashboard.putNumber("Output Test Num", SmartDashboard.getNumber("Input Test Num", 0));
+            SmartDashboard.putBoolean("Output Test Bool", SmartDashboard.getBoolean("Input Test Bool", false));
+            SmartDashboard.putString("Output Test String", SmartDashboard.getString("Input Test String", ""));
+
+            //Uptime
+            upTime = Timer.getFPGATimestamp() - startTime;
+            SmartDashboard.putNumber("Uptime", upTime);
+
+            // LiveWindow
+            LiveWindow.updateValues();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
