@@ -92,15 +92,15 @@ public class SmartDashboardUtils {
             SmartDashboard.putBoolean("Output Test Bool", SmartDashboard.getBoolean("Input Test Bool", false));
             SmartDashboard.putString("Output Test String", SmartDashboard.getString("Input Test String", ""));
 
-            if(SmartDashboard.getBoolean("Action Button", false)) {
-                actionsRan ++;
+            if (SmartDashboard.getBoolean("Action Button", false)) {
+                actionsRan++;
                 SmartDashboard.putBoolean("Action Button", false);
                 SmartDashboard.putNumber("Commands Run", actionsRan);
             }
 
-            //Uptime
+            // Uptime
             upTime = Timer.getFPGATimestamp() - startTime;
-            SmartDashboard.putNumber("Uptime (s)", (int)upTime);
+            SmartDashboard.putNumber("Uptime (s)", (int) upTime);
 
             // LiveWindow
             LiveWindow.updateValues();
