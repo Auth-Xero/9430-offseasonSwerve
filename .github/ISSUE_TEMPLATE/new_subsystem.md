@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-**Subsystem Details**
+# Subsystem Details
 Summarize the objective of the new subsystem. Then, add specific acceptance criteria for a successful subsystem. 
 
-**Components Required**
+# Components Required
 List hardware components you'll be interfacing with and assign/list existing CANIDs. 
 
-**Additional Notes**
+# Additional Notes
 List any additional notes, external references, or details about the design here.

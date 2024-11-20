@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-**Command Details**
+## Command Details
 Summarize the objective of the new command. Then, add specific acceptance criteria for a successful command.
 
-**Affected Subsystems**
+## Affected Subsystems
 Include all existing and future subsystems that will be affected by this command. (Note: if a subsystem does not exist, file a "New Subsystem" issue and link it to this)
 
-**Additional Notes**
+## Additional Notes
 List any additional notes, external references, or details about the design here.
