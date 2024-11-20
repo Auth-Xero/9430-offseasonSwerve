@@ -7,23 +7,23 @@ assignees: ''
 
 ---
 
-# Description
+## Description
 Add a clear and concise description of what the bug is.
 
-# Steps To Reproduce
+## Steps To Reproduce
 Share steps to reproduce the behavior:
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
 4. See error
 
-# Expected behavior 
+## Expected behavior 
 Present a clear and concise description of what you expected to happen.
 
-# Screenshots
+## Screenshots
 If applicable, add screenshots to help explain your problem.
 
-# Environment Information 
+## Environment Information 
 Add necessary details of the environment to narrow down troubleshooting. 
 
 **Desktop (please complete the following information):**
@@ -40,5 +40,5 @@ Add necessary details of the environment to narrow down troubleshooting.
  **Current Robot Version**
 If this bug is related to the robot, specify the robot code version or development branch information here. 
 
-# Additional context
+## Additional context
 Add any other context about the problem here.
