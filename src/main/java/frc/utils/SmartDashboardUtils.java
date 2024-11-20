@@ -24,6 +24,8 @@ public class SmartDashboardUtils {
     private double startTime;
     private double upTime;
 
+    private int actionsRan;
+
     /**
      * Constructor for SmartDashboardUtils
      * 
@@ -56,6 +58,9 @@ public class SmartDashboardUtils {
             SmartDashboard.putBoolean("Output Test Bool", false);
             SmartDashboard.putString("Input Test String", "");
             SmartDashboard.putString("Output Test String", "");
+            SmartDashboard.putBoolean("Action Button", false);
+            actionsRan = 0;
+            SmartDashboard.putNumber("Commands Run", actionsRan);
 
             // Uptime
             startTime = Timer.getFPGATimestamp();
@@ -85,9 +90,15 @@ public class SmartDashboardUtils {
             SmartDashboard.putBoolean("Output Test Bool", SmartDashboard.getBoolean("Input Test Bool", false));
             SmartDashboard.putString("Output Test String", SmartDashboard.getString("Input Test String", ""));
 
+            if(SmartDashboard.getBoolean("Action Button", false)) {
+                actionsRan ++;
+                SmartDashboard.putBoolean("Action Button", false);
+                SmartDashboard.putNumber("Commands Run", actionsRan);
+            }
+
             //Uptime
             upTime = Timer.getFPGATimestamp() - startTime;
-            SmartDashboard.putNumber("Uptime", upTime);
+            SmartDashboard.putNumber("Uptime (s)", (int)upTime);
 
             // LiveWindow
             LiveWindow.updateValues();
