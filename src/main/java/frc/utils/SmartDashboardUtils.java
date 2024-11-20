@@ -4,6 +4,8 @@
 
 package frc.utils;
 
+import javax.management.Notification;
+
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -12,6 +14,8 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.utils.Elastic.ElasticNotification;
+import frc.utils.Elastic.ElasticNotification.NotificationLevel;
 
 /** Where all SmartDashbard vales will be edited */
 public class SmartDashboardUtils {
@@ -96,6 +100,15 @@ public class SmartDashboardUtils {
                 actionsRan++;
                 SmartDashboard.putBoolean("Action Button", false);
                 SmartDashboard.putNumber("Commands Run", actionsRan);
+
+                ElasticNotification notification = new ElasticNotification();
+                
+                notification.setLevel(NotificationLevel.INFO);
+                notification.setTitle("Action Button");
+                notification.setDescription("It has been pressed");
+                notification.setDisplayTimeSeconds(2);
+
+                Elastic.sendAlert(notification);
             }
 
             // Uptime
