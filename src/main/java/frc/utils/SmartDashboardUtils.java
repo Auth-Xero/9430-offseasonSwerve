@@ -46,6 +46,7 @@ public class SmartDashboardUtils {
 
             // Driver Controller Values
             SmartDashboard.putBoolean("Driver Controller A button", false);
+            SmartDashboard.putBoolean("Driver Controller B button", false);
 
             // Pigeon2 Gyro
             SmartDashboard.putNumber("Pigeon2 Rate", 0);
@@ -80,6 +81,7 @@ public class SmartDashboardUtils {
         try {
             // Driver Controller Values
             SmartDashboard.putBoolean("Driver Controller A button", driverController.getAButton());
+            SmartDashboard.putBoolean("Driver Controller B button", driverController.getBButton());
 
             // Pigeon2 Gyro
             SmartDashboard.putNumber("Pigeon2 Rate", pigeon.getRate());
