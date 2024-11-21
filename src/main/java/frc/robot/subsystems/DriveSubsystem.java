@@ -247,4 +247,8 @@ public class DriveSubsystem extends SubsystemBase {
     return pigeon;
   }
 
+  public void resetPigeon2() {
+    pigeon.reset();
+  }
+
 }
