@@ -8,9 +8,12 @@ import javax.management.Notification;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
@@ -29,6 +32,8 @@ public class SmartDashboardUtils {
     private double upTime;
 
     private int actionsRan;
+
+    SendableBuilder builder;
 
     /**
      * Constructor for SmartDashboardUtils
@@ -73,6 +78,9 @@ public class SmartDashboardUtils {
             // Uptime
             startTime = Timer.getFPGATimestamp();
             SmartDashboard.putNumber("Uptime (s)", 0);
+
+            // Autos
+            
 
             // LiveWindow
             LiveWindow.setEnabled(true);
@@ -123,6 +131,7 @@ public class SmartDashboardUtils {
                 notification.setDisplayTimeSeconds(5);
                 sendElasticNotification(notification);
             }
+
 
             // Uptime
             upTime = Timer.getFPGATimestamp() - startTime;
