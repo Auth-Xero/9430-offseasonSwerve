@@ -67,9 +67,12 @@ public class SmartDashboardUtils {
             actionsRan = 0;
             SmartDashboard.putNumber("Commands Run", actionsRan);
 
+            // Pigeon Controls
+            SmartDashboard.putBoolean("Reset Pigeon", false);
+
             // Uptime
             startTime = Timer.getFPGATimestamp();
-            SmartDashboard.putNumber("Uptime", 0);
+            SmartDashboard.putNumber("Uptime (s)", 0);
 
             // LiveWindow
             LiveWindow.setEnabled(true);
@@ -102,13 +105,23 @@ public class SmartDashboardUtils {
                 SmartDashboard.putNumber("Commands Run", actionsRan);
 
                 ElasticNotification notification = new ElasticNotification();
-                
                 notification.setLevel(NotificationLevel.INFO);
                 notification.setTitle("Action Button");
                 notification.setDescription("It has been pressed");
                 notification.setDisplayTimeSeconds(2);
+                sendElasticNotification(notification);
+            }
 
-                Elastic.sendAlert(notification);
+            if (SmartDashboard.getBoolean("Reset Pigeon", false)) {
+                SmartDashboard.putBoolean("Reset Pigeon", false);
+                driveSubsystem.resetPigeon2();
+
+                ElasticNotification notification = new ElasticNotification();
+                notification.setLevel(NotificationLevel.INFO);
+                notification.setTitle("Reset Pigeon");
+                notification.setDescription("Pigeon2 has been reset");
+                notification.setDisplayTimeSeconds(5);
+                sendElasticNotification(notification);
             }
 
             // Uptime
@@ -121,4 +134,9 @@ public class SmartDashboardUtils {
             e.printStackTrace();
         }
     }
+
+    public void sendElasticNotification(ElasticNotification notification){
+        Elastic.sendAlert(notification);
+    }
+
 }
