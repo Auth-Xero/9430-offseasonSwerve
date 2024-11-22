@@ -122,7 +122,7 @@ public class SmartDashboardUtils {
 
             if (SmartDashboard.getBoolean("Reset Pigeon", false)) {
                 SmartDashboard.putBoolean("Reset Pigeon", false);
-                driveSubsystem.resetPigeon2();
+                driveSubsystem.zeroHeading();
 
                 ElasticNotification notification = new ElasticNotification();
                 notification.setLevel(NotificationLevel.INFO);
