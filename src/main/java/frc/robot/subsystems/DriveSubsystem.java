@@ -67,7 +67,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    zeroHeading();
   }
 
   @Override
@@ -246,10 +245,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Pigeon2 getPigeon2() {
     return pigeon;
-  }
-
-  public void resetPigeon2() {
-    pigeon.reset();
   }
 
 }
