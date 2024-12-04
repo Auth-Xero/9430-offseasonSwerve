@@ -281,4 +281,9 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return pigeon.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  public Pigeon2 getPigeon2() {
+    return pigeon;
+  }
+
 }
