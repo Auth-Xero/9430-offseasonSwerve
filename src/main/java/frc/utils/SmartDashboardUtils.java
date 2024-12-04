@@ -67,9 +67,7 @@ public class SmartDashboardUtils {
             paths.setDefaultOption("DriveForwardPath", driveForwardPath);
 
             SmartDashboard.putData("Paths", paths);
-
             SmartDashboard.putString("Selected Path", selectedPath);
-
             SmartDashboard.putBoolean("Run Auto", false);
 
             // LiveWindow
@@ -93,7 +91,6 @@ public class SmartDashboardUtils {
             SmartDashboard.putString("Selected Path", selectedPath);
 
             if (SmartDashboard.getBoolean("Run Auto", false)) {
-
                 SmartDashboard.putBoolean("Run Auto", false);
 
                 robotContainer.setActivePath(selectedPath);
