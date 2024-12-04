@@ -83,7 +83,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     try {
-      PathPlannerPath path = PathPlannerPath.fromPathFile("Go Forward");
+      PathPlannerPath path = PathPlannerPath.fromPathFile(activePath);
       return AutoBuilder.followPath(path);
     } catch (Exception e) {
       DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
