@@ -59,10 +59,12 @@ public class SmartDashboardUtils {
             SmartDashboard.putNumber("Uptime (s)", 0);
 
             // Autos
-            String driveForwardPath = "pathplanner\\paths\\Drive Forward.path";
+            String driveForwardPath = "Drive Forward";
             paths.addOption("DriveForwardPath", driveForwardPath);
-            String spinPath = "pathplanner\\paths\\Spin.path";
+            String spinPath = "Spin";
             paths.addOption("Spin", spinPath);
+            String goForwardPath = "Go Forward";
+            paths.addOption("GoForwardPath", goForwardPath);
 
             paths.setDefaultOption("DriveForwardPath", driveForwardPath);
 
