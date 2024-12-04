@@ -4,12 +4,8 @@
 
 package frc.utils;
 
-import javax.management.Notification;
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -31,9 +27,9 @@ public class SmartDashboardUtils {
     private double startTime;
     private double upTime;
 
-    private int actionsRan;
 
-    SendableBuilder builder;
+    private SendableChooser<String> paths = new SendableChooser<String>();
+    String selectedPath = "";
 
     /**
      * Constructor for SmartDashboardUtils
@@ -54,36 +50,28 @@ public class SmartDashboardUtils {
             driverController = robotContainer.getDriverController();
 
             // Driver Controller Values
-            SmartDashboard.putBoolean("Driver Controller A button", false);
-            SmartDashboard.putBoolean("Driver Controller B button", false);
 
             // Pigeon2 Gyro
-            SmartDashboard.putNumber("Pigeon2 Rate", 0);
-            SmartDashboard.putNumber("Pigeon2 Angle", 0);
-
-            // Input Testing
-            SmartDashboard.putNumber("Input Test Num", 0);
-            SmartDashboard.putNumber("Output Test Num", 0);
-            SmartDashboard.putBoolean("Input Test Bool", false);
-            SmartDashboard.putBoolean("Output Test Bool", false);
-            SmartDashboard.putString("Input Test String", "");
-            SmartDashboard.putString("Output Test String", "");
-            SmartDashboard.putBoolean("Action Button", false);
-            actionsRan = 0;
-            SmartDashboard.putNumber("Commands Run", actionsRan);
-
-            // Pigeon Controls
             SmartDashboard.putBoolean("Reset Pigeon", false);
 
             // Uptime
             startTime = Timer.getFPGATimestamp();
             SmartDashboard.putNumber("Uptime (s)", 0);
 
+            SmartDashboard.putBoolean("Action Button", false);
             // Autos
-            
+            String testA = "a";
+            paths.addOption("Test a", testA);
+            String testB = "b";
+            paths.addOption("Test b", testB);
+            String testC = "c";
+            paths.addOption("Test C", testC);
+            SmartDashboard.putData("Paths I hope", paths);
+            SmartDashboard.putString("Selected Path", selectedPath);
 
             // LiveWindow
             LiveWindow.setEnabled(true);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -95,22 +83,12 @@ public class SmartDashboardUtils {
     public void updateDashboard() {
         try {
             // Driver Controller Values
-            SmartDashboard.putBoolean("Driver Controller A button", driverController.getAButton());
-            SmartDashboard.putBoolean("Driver Controller B button", driverController.getBButton());
-
+            
             // Pigeon2 Gyro
-            SmartDashboard.putNumber("Pigeon2 Rate", pigeon.getRate());
-            SmartDashboard.putNumber("Pigeon2 Angle", pigeon.getAngle());
-
-            // Input Testing
-            SmartDashboard.putNumber("Output Test Num", SmartDashboard.getNumber("Input Test Num", 0));
-            SmartDashboard.putBoolean("Output Test Bool", SmartDashboard.getBoolean("Input Test Bool", false));
-            SmartDashboard.putString("Output Test String", SmartDashboard.getString("Input Test String", ""));
 
             if (SmartDashboard.getBoolean("Action Button", false)) {
-                actionsRan++;
+                
                 SmartDashboard.putBoolean("Action Button", false);
-                SmartDashboard.putNumber("Commands Run", actionsRan);
 
                 ElasticNotification notification = new ElasticNotification();
                 notification.setLevel(NotificationLevel.INFO);
@@ -131,6 +109,9 @@ public class SmartDashboardUtils {
                 notification.setDisplayTimeSeconds(5);
                 sendElasticNotification(notification);
             }
+
+            selectedPath = paths.getSelected();
+            SmartDashboard.putString("Selected Path", selectedPath);
 
 
             // Uptime
