@@ -69,9 +69,7 @@ public class SmartDashboardUtils {
             paths.setDefaultOption("DriveForwardPath", driveForwardPath);
 
             SmartDashboard.putData("Paths", paths);
-
             SmartDashboard.putString("Selected Path", selectedPath);
-
             SmartDashboard.putBoolean("Run Auto", false);
 
             // LiveWindow
