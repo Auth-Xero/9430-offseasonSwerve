@@ -61,11 +61,13 @@ public class SmartDashboardUtils {
             // Autos
             String driveForwardPath = "pathplanner\\paths\\Drive Forward.path";
             paths.addOption("DriveForwardPath", driveForwardPath);
-            String testB = "b";
-            paths.addOption("Test b", testB);
-            String testC = "c";
-            paths.addOption("Test C", testC);
-            SmartDashboard.putData("Paths I hope", paths);
+            String spinPath = "pathplanner\\paths\\Spin.path";
+            paths.addOption("Spin", spinPath);
+
+            paths.setDefaultOption("DriveForwardPath", driveForwardPath);
+
+            SmartDashboard.putData("Paths", paths);
+
             SmartDashboard.putString("Selected Path", selectedPath);
 
             SmartDashboard.putBoolean("Run Auto", false);
@@ -115,9 +117,6 @@ public class SmartDashboardUtils {
                 notification.setDisplayTimeSeconds(5);
                 sendElasticNotification(notification);
             }
-
-            
-
 
             // Uptime
             upTime = Timer.getFPGATimestamp() - startTime;
