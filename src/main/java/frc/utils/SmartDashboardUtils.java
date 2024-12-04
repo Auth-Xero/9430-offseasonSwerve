@@ -58,16 +58,17 @@ public class SmartDashboardUtils {
             startTime = Timer.getFPGATimestamp();
             SmartDashboard.putNumber("Uptime (s)", 0);
 
-            SmartDashboard.putBoolean("Action Button", false);
             // Autos
-            String testA = "a";
-            paths.addOption("Test a", testA);
+            String driveForwardPath = "pathplanner\\paths\\Drive Forward.path";
+            paths.addOption("DriveForwardPath", driveForwardPath);
             String testB = "b";
             paths.addOption("Test b", testB);
             String testC = "c";
             paths.addOption("Test C", testC);
             SmartDashboard.putData("Paths I hope", paths);
             SmartDashboard.putString("Selected Path", selectedPath);
+
+            SmartDashboard.putBoolean("Run Auto", false);
 
             // LiveWindow
             LiveWindow.setEnabled(true);
@@ -86,14 +87,14 @@ public class SmartDashboardUtils {
             
             // Pigeon2 Gyro
 
-            if (SmartDashboard.getBoolean("Action Button", false)) {
-                
-                SmartDashboard.putBoolean("Action Button", false);
+            if (SmartDashboard.getBoolean("Run Auto", false)) {
+
+                SmartDashboard.putBoolean("Run Auto", false);
 
                 ElasticNotification notification = new ElasticNotification();
                 notification.setLevel(NotificationLevel.INFO);
-                notification.setTitle("Action Button");
-                notification.setDescription("It has been pressed");
+                notification.setTitle("Running Auto...");
+                notification.setDescription("Selected Path: " + selectedPath);
                 notification.setDisplayTimeSeconds(2);
                 sendElasticNotification(notification);
             }
