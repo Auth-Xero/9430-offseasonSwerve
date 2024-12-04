@@ -87,9 +87,14 @@ public class SmartDashboardUtils {
             
             // Pigeon2 Gyro
 
+            selectedPath = paths.getSelected();
+            SmartDashboard.putString("Selected Path", selectedPath);
+
             if (SmartDashboard.getBoolean("Run Auto", false)) {
 
                 SmartDashboard.putBoolean("Run Auto", false);
+
+                robotContainer.setActivePath(selectedPath);
 
                 ElasticNotification notification = new ElasticNotification();
                 notification.setLevel(NotificationLevel.INFO);
@@ -111,8 +116,7 @@ public class SmartDashboardUtils {
                 sendElasticNotification(notification);
             }
 
-            selectedPath = paths.getSelected();
-            SmartDashboard.putString("Selected Path", selectedPath);
+            
 
 
             // Uptime

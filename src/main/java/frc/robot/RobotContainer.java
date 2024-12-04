@@ -41,6 +41,8 @@ public class RobotContainer {
 
   SmartDashboardUtils dashboard;
 
+  private String activePath;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -149,6 +151,10 @@ public class RobotContainer {
    */
   public XboxController getDriverController() {
     return m_driverController;
+  }
+
+  public void setActivePath(String path) {
+    activePath = path;
   }
 
 }
