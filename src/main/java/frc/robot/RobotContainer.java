@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,8 +45,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    dashboard = new SmartDashboardUtils(this);
-    dashboard.dashboardInit();
+    // dashboard = new SmartDashboardUtils(this);
+    // dashboard.dashboardInit();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -64,8 +65,10 @@ public class RobotContainer {
 
     Command forwardPathCommand = null;
     try {
-    PathPlannerPath path = PathPlannerPath.fromPathFile("Go Forward");
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin Snake");
+    Pose2d startingPose = path.getPreviewStartingHolonomicPose();
     forwardPathCommand = AutoBuilder.followPath(path);
+    m_robotDrive.resetOdometry(startingPose);
     } catch (Exception e) {
     DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
     }

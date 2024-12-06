@@ -53,9 +53,9 @@ public class SmartDashboardUtils {
      */
     public void dashboardInit() {
         try {
-            driveSubsystem = robotContainer.getDriveSubsystem();
-            pigeon = driveSubsystem.getPigeon2();
-            driverController = robotContainer.getDriverController();
+            // driveSubsystem = robotContainer.getDriveSubsystem();
+            // pigeon = driveSubsystem.getPigeon2();
+            // driverController = robotContainer.getDriverController();
 
             // Driver Controller Values
 
