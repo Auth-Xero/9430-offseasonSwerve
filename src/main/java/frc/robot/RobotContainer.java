@@ -5,14 +5,16 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.utils.SmartDashboardUtils;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -33,15 +35,16 @@ public class RobotContainer {
 
   SmartDashboardUtils dashboard;
 
-  private String activePath;
+  public final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
 
-    dashboard = new SmartDashboardUtils(this);
-    dashboard.dashboardInit();
+    // dashboard = new SmartDashboardUtils(this);
+    // dashboard.dashboardInit();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -58,6 +61,28 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
+    Command forwardPathCommand = null;
+    try {
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin Snake");
+    Pose2d startingPose = path.getPreviewStartingHolonomicPose();
+    forwardPathCommand = AutoBuilder.followPath(path);
+    m_robotDrive.resetOdometry(startingPose);
+    } catch (Exception e) {
+    DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+
+    m_chooser.setDefaultOption("Go Forward Path", forwardPathCommand);
+
+    Command spinCommand = null;
+    try {
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin");
+    spinCommand = AutoBuilder.followPath(path);
+    } catch (Exception e) {
+    DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+
+    m_chooser.addOption("Spin Command", spinCommand);
+    SmartDashboard.putData("Commands :)",m_chooser);
   }
 
   /**
@@ -82,13 +107,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    try {
-      PathPlannerPath path = PathPlannerPath.fromPathFile(activePath);
-      return AutoBuilder.followPath(path);
-    } catch (Exception e) {
-      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-      return Commands.none();
-    }
+    return m_chooser.getSelected();
   }
 
   /**
@@ -112,10 +131,6 @@ public class RobotContainer {
    */
   public XboxController getDriverController() {
     return m_driverController;
-  }
-
-  public void setActivePath(String path) {
-    activePath = path;
   }
 
 }
