@@ -9,7 +9,6 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveSubsystem;
@@ -28,9 +27,6 @@ public class SmartDashboardUtils {
     private double upTime;
 
 
-    private SendableChooser<String> paths = new SendableChooser<String>();
-    String selectedPath = "";
-
     /**
      * Constructor for SmartDashboardUtils
      * 
@@ -45,9 +41,6 @@ public class SmartDashboardUtils {
      */
     public void dashboardInit() {
         try {
-            driveSubsystem = robotContainer.getDriveSubsystem();
-            pigeon = driveSubsystem.getPigeon2();
-            driverController = robotContainer.getDriverController();
 
             // Driver Controller Values
 
@@ -59,18 +52,6 @@ public class SmartDashboardUtils {
             SmartDashboard.putNumber("Uptime (s)", 0);
 
             // Autos
-            String driveForwardPath = "Drive Forward";
-            paths.addOption("DriveForwardPath", driveForwardPath);
-            String spinPath = "Spin";
-            paths.addOption("Spin", spinPath);
-            String goForwardPath = "Go Forward";
-            paths.addOption("GoForwardPath", goForwardPath);
-
-            paths.setDefaultOption("DriveForwardPath", driveForwardPath);
-
-            SmartDashboard.putData("Paths", paths);
-            SmartDashboard.putString("Selected Path", selectedPath);
-            SmartDashboard.putBoolean("Run Auto", false);
 
             // LiveWindow
             LiveWindow.setEnabled(true);
@@ -88,23 +69,6 @@ public class SmartDashboardUtils {
             // Driver Controller Values
             
             // Pigeon2 Gyro
-
-            selectedPath = paths.getSelected();
-            SmartDashboard.putString("Selected Path", selectedPath);
-
-            if (SmartDashboard.getBoolean("Run Auto", false)) {
-
-                SmartDashboard.putBoolean("Run Auto", false);
-
-                robotContainer.setActivePath(selectedPath);
-
-                ElasticNotification notification = new ElasticNotification();
-                notification.setLevel(NotificationLevel.INFO);
-                notification.setTitle("Running Auto...");
-                notification.setDescription("Selected Path: " + selectedPath);
-                notification.setDisplayTimeSeconds(2);
-                sendElasticNotification(notification);
-            }
 
             if (SmartDashboard.getBoolean("Reset Pigeon", false)) {
                 SmartDashboard.putBoolean("Reset Pigeon", false);
