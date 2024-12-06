@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.OIConstants;
@@ -33,7 +35,9 @@ public class RobotContainer {
 
   SmartDashboardUtils dashboard;
 
-  private String activePath;
+  public final SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  private Command activeCommand;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,6 +62,26 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
+    Command forwardPathCommand = null;
+    try {
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Go Forward");
+    forwardPathCommand = AutoBuilder.followPath(path);
+    } catch (Exception e) {
+    DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+
+    m_chooser.setDefaultOption("Go Forward Path", forwardPathCommand);
+
+    Command spinCommand = null;
+    try {
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin");
+    spinCommand = AutoBuilder.followPath(path);
+    } catch (Exception e) {
+    DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
+
+    m_chooser.addOption("Spin Command", spinCommand);
+    SmartDashboard.putData("Commands :)",m_chooser);
   }
 
   /**
@@ -82,13 +106,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    try {
-      PathPlannerPath path = PathPlannerPath.fromPathFile(activePath);
-      return AutoBuilder.followPath(path);
-    } catch (Exception e) {
-      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-      return Commands.none();
-    }
+    return m_chooser.getSelected();
   }
 
   /**
@@ -114,8 +132,8 @@ public class RobotContainer {
     return m_driverController;
   }
 
-  public void setActivePath(String path) {
-    activePath = path;
+  public void setActiveCommand(Command newCommand) {
+    activeCommand = newCommand;
   }
 
 }
