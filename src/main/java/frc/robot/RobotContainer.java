@@ -67,22 +67,24 @@ public class RobotContainer {
     Pose2d startingPose = path.getPreviewStartingHolonomicPose();
     forwardPathCommand = AutoBuilder.followPath(path);
     m_robotDrive.resetOdometry(startingPose);
+    m_chooser.setDefaultOption("Go Forward Path", forwardPathCommand);
+
     } catch (Exception e) {
     DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
     }
 
-    m_chooser.setDefaultOption("Go Forward Path", forwardPathCommand);
-
+    
     Command spinCommand = null;
     try {
     PathPlannerPath path = PathPlannerPath.fromPathFile("Spin");
     spinCommand = AutoBuilder.followPath(path);
+    
+    m_chooser.addOption("Spin Command", spinCommand);
+
     } catch (Exception e) {
     DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
     }
-
-    m_chooser.addOption("Spin Command", spinCommand);
-    SmartDashboard.putData("Commands :)",m_chooser);
+ SmartDashboard.putData("Commands :)",m_chooser);
   }
 
   /**
@@ -114,7 +116,7 @@ public class RobotContainer {
    * Updates SmartDashboard
    */
   public void updateSmardDashboard() {
-    dashboard.updateDashboard();
+    // dashboard.updateDashboard();
   }
 
   /**
