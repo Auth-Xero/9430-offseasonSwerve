@@ -1,13 +1,14 @@
 ---
-name: Request a new command
-about: Suggest a new command for this project
-title: 'New Command: '
-labels: 'command'
+name: Request an update to an existing command
+about: Suggest changes to a command for this project
+title: 'Update Command: '
+labels: 'command, enhancement'
 assignees: ''
 
 ---
 
 ## Command Details
+**Existing command name:** "xyz" 
 Summarize the objective of the new command. Then, add specific acceptance criteria for a successful command.
 
 ## Affected Subsystems

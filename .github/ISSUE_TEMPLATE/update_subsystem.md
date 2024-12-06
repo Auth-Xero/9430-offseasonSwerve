@@ -1,13 +1,14 @@
 ---
-name: Request a new subsystem
-about: Suggest a new subsystem for this project
-title: 'New Subsystem: '
+name: Request an update to an existing subsystem
+about: Suggest a change to a subsystem for this project
+title: 'Update Subsystem: '
 labels: 'subsystem'
 assignees: ''
 
 ---
 
 ## Subsystem Details
+**Existing Subsystem:** "xyz"
 Summarize the objective of the new subsystem. Then, add specific acceptance criteria for a successful subsystem. 
 
 ## Components Required

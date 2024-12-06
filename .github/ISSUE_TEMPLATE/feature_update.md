@@ -1,16 +1,16 @@
 ---
-name: Feature Request
-about: Use this as a general feature request for requests without templates. Use "Bug Report" instead to report an existing feature not working.
-title: 'New Feature: '
+name: Feature Update
+about: Use this as a general feature request to update an existing feature. Use "Bug Report" instead to report an existing feature not working.
+title: 'Update Feature: '
 labels: 'enhancement'
 assignees: ''
 
 ---
 
-## Problem Summary
+## Existing Feature Summary
 Add a clear and concise description of what the problem is. Ex. I'm always frustrated when [...]; (do not write about the solution here)
 
-## Feature Summary
+## Updated Feature Summary
 Add a clear and concise description of what you want to happen. (This should include specific acceptance criteria to close the issue as completed)
 
 ## Alternative Design Considerations
