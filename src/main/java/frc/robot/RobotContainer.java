@@ -63,7 +63,7 @@ public class RobotContainer {
 
     Command forwardPathCommand = null;
     try {
-    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin Snake");
+    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin Forward");
     Pose2d startingPose = path.getPreviewStartingHolonomicPose();
     forwardPathCommand = AutoBuilder.followPath(path);
     m_robotDrive.resetOdometry(startingPose);
