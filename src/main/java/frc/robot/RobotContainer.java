@@ -135,4 +135,8 @@ public class RobotContainer {
     return m_driverController;
   }
 
+  public void zeroHeading() {
+    m_robotDrive.zeroHeading();
+  }
+
 }
