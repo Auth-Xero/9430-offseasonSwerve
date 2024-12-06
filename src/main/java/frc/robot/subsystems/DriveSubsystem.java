@@ -73,7 +73,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    zeroHeading();
+    
+    // zeroHeading();
     AutoBuilder.configureHolonomic(
         this::getPose, // Robot pose supplier
         this::resetOdometry, // Method to reset odometry
@@ -95,11 +96,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
-    ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds.vxMetersPerSecond,
-        chassisSpeeds.vyMetersPerSecond, chassisSpeeds.omegaRadiansPerSecond, getPose().getRotation());
-
-    speeds = ChassisSpeeds.discretize(speeds, 0.2);
-    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     setModuleStates(swerveModuleStates);
   }
