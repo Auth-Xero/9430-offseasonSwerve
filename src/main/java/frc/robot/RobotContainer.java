@@ -5,16 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.utils.SmartDashboardUtils;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -32,6 +28,8 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  private SmartDashboardUtils smartDashboardUtils;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -52,6 +50,8 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
+    smartDashboardUtils = new SmartDashboardUtils();
   }
 
   /**
@@ -76,25 +76,13 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    PathPlannerPath selectedPath = smartDashboardUtils.pathChooser.getSelected();
 
-    //TODO: PLEACEHOLDER COMMAND, PLEASE CHANGE WHEN SENDABLECHOOSER IS IMPLEMENTED!!!
-    return Commands.none();
-  }
+    m_robotDrive.resetOdometry(selectedPath.getPreviewStartingHolonomicPose());
 
-  /**
-   * Get the DriveSubsystem
-   * @return DriveSubsystem
-   */
-  public DriveSubsystem getDriveSubsystem() {
-    return m_robotDrive;
-  }
+    Command selectedCommand = AutoBuilder.followPath(selectedPath);
 
-  /**
-   * Get the diverXboxController
-   * @return XboxController of diver
-   */
-  public XboxController getDriverController() {
-    return m_driverController;
+    return selectedCommand;
   }
 
 }
