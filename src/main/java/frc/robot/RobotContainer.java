@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.utils.SmartDashboardUtils;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -33,18 +32,10 @@ public class RobotContainer {
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
-  SmartDashboardUtils dashboard;
-
-  public final SendableChooser<Command> m_chooser = new SendableChooser<>();
-
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
-    // dashboard = new SmartDashboardUtils(this);
-    // dashboard.dashboardInit();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -113,13 +104,6 @@ public class RobotContainer {
   }
 
   /**
-   * Updates SmartDashboard
-   */
-  public void updateSmardDashboard() {
-    // dashboard.updateDashboard();
-  }
-
-  /**
    * Get the DriveSubsystem
    * @return DriveSubsystem
    */
@@ -133,10 +117,6 @@ public class RobotContainer {
    */
   public XboxController getDriverController() {
     return m_driverController;
-  }
-
-  public void zeroHeading() {
-    m_robotDrive.zeroHeading();
   }
 
 }

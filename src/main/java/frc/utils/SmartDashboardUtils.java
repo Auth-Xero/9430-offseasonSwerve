@@ -4,36 +4,27 @@
 
 package frc.utils;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.utils.Elastic.ElasticNotification;
-import frc.utils.Elastic.ElasticNotification.NotificationLevel;
 
 /** Where all SmartDashbard vales will be edited */
-public class SmartDashboardUtils {
+public class SmartDashboardUtils extends SubsystemBase{
 
-    private RobotContainer robotContainer;
-    private DriveSubsystem driveSubsystem;
-    private XboxController driverController;
-    private Pigeon2 pigeon;
+    
 
     private double startTime;
     private double upTime;
-
 
     /**
      * Constructor for SmartDashboardUtils
      * 
      * @param robotContainer
      */
-    public SmartDashboardUtils(RobotContainer robotContainer) {
-        this.robotContainer = robotContainer;
+    public SmartDashboardUtils() {
+
     }
 
     /**
@@ -42,17 +33,12 @@ public class SmartDashboardUtils {
     public void dashboardInit() {
         try {
 
-            // Driver Controller Values
 
-            // Pigeon2 Gyro
-            SmartDashboard.putBoolean("Reset Pigeon", false);
 
             // Uptime
             startTime = Timer.getFPGATimestamp();
             SmartDashboard.putNumber("Uptime (s)", 0);
-
-            // Autos
-
+            
             // LiveWindow
             LiveWindow.setEnabled(true);
 
@@ -64,23 +50,9 @@ public class SmartDashboardUtils {
     /**
      * Updates the values on the SmartDashboard
      */
-    public void updateDashboard() {
+    @Override
+    public void periodic() {
         try {
-            // Driver Controller Values
-            
-            // Pigeon2 Gyro
-
-            if (SmartDashboard.getBoolean("Reset Pigeon", false)) {
-                SmartDashboard.putBoolean("Reset Pigeon", false);
-                driveSubsystem.zeroHeading();
-
-                ElasticNotification notification = new ElasticNotification();
-                notification.setLevel(NotificationLevel.INFO);
-                notification.setTitle("Reset Pigeon");
-                notification.setDescription("Pigeon2 has been reset");
-                notification.setDisplayTimeSeconds(5);
-                sendElasticNotification(notification);
-            }
 
             // Uptime
             upTime = Timer.getFPGATimestamp() - startTime;
