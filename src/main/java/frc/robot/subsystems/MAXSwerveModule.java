@@ -154,7 +154,7 @@ public class MAXSwerveModule {
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
-    m_desiredState = optimizedDesiredState; // this is for a random commit
+    m_desiredState = optimizedDesiredState;
   }
 
   /** Zeroes all the SwerveModule encoders. */
