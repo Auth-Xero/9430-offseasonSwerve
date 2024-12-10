@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -51,31 +52,6 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
-
-    Command forwardPathCommand = null;
-    try {
-    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin Forward");
-    Pose2d startingPose = path.getPreviewStartingHolonomicPose();
-    forwardPathCommand = AutoBuilder.followPath(path);
-    m_robotDrive.resetOdometry(startingPose);
-    m_chooser.setDefaultOption("Go Forward Path", forwardPathCommand);
-
-    } catch (Exception e) {
-    DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-    }
-
-    
-    Command spinCommand = null;
-    try {
-    PathPlannerPath path = PathPlannerPath.fromPathFile("Spin");
-    spinCommand = AutoBuilder.followPath(path);
-    
-    m_chooser.addOption("Spin Command", spinCommand);
-
-    } catch (Exception e) {
-    DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-    }
- SmartDashboard.putData("Commands :)",m_chooser);
   }
 
   /**
@@ -100,7 +76,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+
+    //TODO: PLEACEHOLDER COMMAND, PLEASE CHANGE WHEN SENDABLECHOOSER IS IMPLEMENTED!!!
+    return Commands.none();
   }
 
   /**
