@@ -4,16 +4,26 @@
 
 package frc.utils;
 
+import java.nio.file.Path;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.utils.Elastic.ElasticNotification;
 
 /** Where all SmartDashbard vales will be edited */
 public class SmartDashboardUtils extends SubsystemBase{
 
-    
+    private PathPlannerPath spinPath;
+    private PathPlannerPath driveForwarPath;
+
+    public SendableChooser<PathPlannerPath> pathChooser;
 
     private double startTime;
     private double upTime;
@@ -24,7 +34,7 @@ public class SmartDashboardUtils extends SubsystemBase{
      * @param robotContainer
      */
     public SmartDashboardUtils() {
-
+        dashboardInit();
     }
 
     /**
@@ -33,6 +43,15 @@ public class SmartDashboardUtils extends SubsystemBase{
     public void dashboardInit() {
         try {
 
+            pathChooser = new SendableChooser<PathPlannerPath>();
+
+            spinPath = PathPlannerPath.fromPathFile("Spin");
+            driveForwarPath = PathPlannerPath.fromPathFile("Drive Forward");
+
+            pathChooser.setDefaultOption("Go Forward", driveForwarPath);
+            pathChooser.addOption("Spin", spinPath);
+
+            SmartDashboard.putData("Path Chooser", pathChooser);
 
 
             // Uptime
