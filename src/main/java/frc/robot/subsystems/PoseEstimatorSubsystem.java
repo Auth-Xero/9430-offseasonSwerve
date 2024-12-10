@@ -38,15 +38,18 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     private static final double VISION_STD_DEV_HEADING = 0.9;
 
     // If we have multiple cameras, we list their names here.
-    // Replace with your actual camera names from PhotonVision.
+    //Add as many cameras we plan to use that season
+    //TODO: FILL CAMERA NAMES IN PLEASE!!!
     private static final String[] CAMERA_NAMES = {"CameraFront", "CameraBack"};
 
     // Each camera might be mounted differently on the robot.
     // These transforms describe the camera's position and orientation relative to the robot's center.
     // Measure this carefully on your actual robot and fill these in.
     private final Transform3d[] robotToCams = {
+        //TODO: FILL CAMERA TRANSFORMS IN PLEASE!!!
         new Transform3d(/* front camera offset */),
         new Transform3d(/* back camera offset */)
+        //Add as many cameras we plan to use that season
     };
 
     public PoseEstimatorSubsystem(Pose2d initialPose) {
