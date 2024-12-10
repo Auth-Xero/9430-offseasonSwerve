@@ -10,6 +10,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,9 +45,9 @@ public class SmartDashboardUtils extends SubsystemBase{
             pathChooser = new SendableChooser<PathPlannerPath>();
 
             spinPath = PathPlannerPath.fromPathFile("Spin");
-            driveForwarPath = PathPlannerPath.fromPathFile("Drive Forward");
+            driveForwarPath = PathPlannerPath.fromPathFile("Drive Forward " + ((DriverStation.getAlliance().get() == Alliance.Red)? "Red": "Blue"));
 
-            pathChooser.setDefaultOption("Go Forward", driveForwarPath);
+            pathChooser.setDefaultOption("Go Forward " + ((DriverStation.getAlliance().get() == Alliance.Red)? "Red": "Blue"), driveForwarPath);
             pathChooser.addOption("Spin", spinPath);
 
             SmartDashboard.putData("Path Chooser", pathChooser);
