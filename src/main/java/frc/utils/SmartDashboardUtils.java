@@ -4,19 +4,12 @@
 
 package frc.utils;
 
-import java.nio.file.Path;
-
-import com.ctre.phoenix6.hardware.Pigeon2;
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.utils.Elastic.ElasticNotification;
@@ -25,7 +18,6 @@ import frc.utils.Elastic.ElasticNotification;
 public class SmartDashboardUtils extends SubsystemBase{
 
     private DriveSubsystem driveSubsystem;
-    private Pigeon2 gyro;
 
     private PathPlannerPath spinPath;
     private PathPlannerPath driveForwarPath;
@@ -39,7 +31,6 @@ public class SmartDashboardUtils extends SubsystemBase{
      */
     public SmartDashboardUtils(DriveSubsystem driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
-        this.gyro = driveSubsystem.getPigeon2();
         dashboardInit();
     }
 
