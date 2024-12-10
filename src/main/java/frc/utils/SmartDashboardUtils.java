@@ -6,6 +6,7 @@ package frc.utils;
 
 import java.nio.file.Path;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -17,10 +18,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.utils.Elastic.ElasticNotification;
 
 /** Where all SmartDashbard vales will be edited */
 public class SmartDashboardUtils extends SubsystemBase{
+
+    private DriveSubsystem driveSubsystem;
+    private Pigeon2 gyro;
 
     private PathPlannerPath spinPath;
     private PathPlannerPath driveForwarPath;
@@ -32,7 +37,9 @@ public class SmartDashboardUtils extends SubsystemBase{
      * 
      * @param robotContainer
      */
-    public SmartDashboardUtils() {
+    public SmartDashboardUtils(DriveSubsystem driveSubsystem) {
+        this.driveSubsystem = driveSubsystem;
+        this.gyro = driveSubsystem.getPigeon2();
         dashboardInit();
     }
 
@@ -52,6 +59,11 @@ public class SmartDashboardUtils extends SubsystemBase{
 
             SmartDashboard.putData("Path Chooser", pathChooser);
 
+            SmartDashboard.putBoolean("Zero Heading", false);
+
+
+           
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,7 +74,16 @@ public class SmartDashboardUtils extends SubsystemBase{
      */
     @Override
     public void periodic() {
-       
+       try {
+            
+            if(SmartDashboard.getBoolean("Zero Heading", false)) {
+                SmartDashboard.putBoolean("Zero Heading", false);
+                driveSubsystem.zeroHeading();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void sendElasticNotification(ElasticNotification notification){

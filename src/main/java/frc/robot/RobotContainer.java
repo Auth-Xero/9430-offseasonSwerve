@@ -51,7 +51,7 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    smartDashboardUtils = new SmartDashboardUtils();
+    smartDashboardUtils = new SmartDashboardUtils(m_robotDrive);
   }
 
   /**
