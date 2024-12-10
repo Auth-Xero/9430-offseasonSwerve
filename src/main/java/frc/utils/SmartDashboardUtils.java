@@ -15,9 +15,6 @@ public class SmartDashboardUtils extends SubsystemBase{
 
     
 
-    private double startTime;
-    private double upTime;
-
     /**
      * Constructor for SmartDashboardUtils
      * 
@@ -34,14 +31,6 @@ public class SmartDashboardUtils extends SubsystemBase{
         try {
 
 
-
-            // Uptime
-            startTime = Timer.getFPGATimestamp();
-            SmartDashboard.putNumber("Uptime (s)", 0);
-            
-            // LiveWindow
-            LiveWindow.setEnabled(true);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,17 +41,7 @@ public class SmartDashboardUtils extends SubsystemBase{
      */
     @Override
     public void periodic() {
-        try {
-
-            // Uptime
-            upTime = Timer.getFPGATimestamp() - startTime;
-            SmartDashboard.putNumber("Uptime (s)", (int) upTime);
-
-            // LiveWindow
-            LiveWindow.updateValues();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+       
     }
 
     public void sendElasticNotification(ElasticNotification notification){
