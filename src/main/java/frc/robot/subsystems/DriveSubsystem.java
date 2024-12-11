@@ -85,7 +85,6 @@ public class DriveSubsystem extends SubsystemBase {
             new ReplanningConfig()
         ),
         () -> {
-          Alliance alliance = DriverStation.getAlliance().get();
           return false;
         },
         this

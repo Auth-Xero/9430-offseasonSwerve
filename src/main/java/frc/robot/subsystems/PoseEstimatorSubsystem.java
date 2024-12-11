@@ -91,7 +91,7 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
         poseEstimator = new SwerveDrivePoseEstimator(
             Constants.DriveConstants.kDriveKinematics,
             new Rotation2d(),
-            new SwerveModulePosition[] {},
+            new SwerveModulePosition[] {new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition(),new SwerveModulePosition()},
             initialPose,
             stateStdDevs,
             visionStdDevs
