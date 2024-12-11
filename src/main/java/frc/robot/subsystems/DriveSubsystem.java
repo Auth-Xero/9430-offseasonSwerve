@@ -90,7 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
         ),
         () -> {
           Alliance alliance = DriverStation.getAlliance().get();
-          return alliance == Alliance.Red;
+          return false;
         },
         this // Reference to this subsystem to set requirements
     );
