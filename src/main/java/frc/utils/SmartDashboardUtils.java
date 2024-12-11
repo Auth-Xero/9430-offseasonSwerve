@@ -21,6 +21,8 @@ public class SmartDashboardUtils extends SubsystemBase{
 
     private PathPlannerPath spinPath;
     private PathPlannerPath driveForwarPath;
+    private PathPlannerPath mForward;
+    private PathPlannerPath mBackward;
 
     public SendableChooser<PathPlannerPath> pathChooser;
 
@@ -44,11 +46,20 @@ public class SmartDashboardUtils extends SubsystemBase{
 
             spinPath = PathPlannerPath.fromPathFile("Spin");
             driveForwarPath = PathPlannerPath.fromPathFile("Drive Forward " + ((DriverStation.getAlliance().get() == Alliance.Red)? "Red": "Blue"));
+            mForward = PathPlannerPath.fromPathFile("X Meters Forward");
+            mBackward = PathPlannerPath.fromPathFile("X Meters Backwards");
+            
 
             pathChooser.setDefaultOption("Go Forward " + ((DriverStation.getAlliance().get() == Alliance.Red)? "Red": "Blue"), driveForwarPath);
             pathChooser.addOption("Spin", spinPath);
+            pathChooser.addOption("X Meters Forward", mForward);
+            pathChooser.addOption("X Meters Backward", mBackward);
+
+
 
             SmartDashboard.putData("Path Chooser", pathChooser);
+
+
 
             SmartDashboard.putBoolean("Zero Heading", false);
 
