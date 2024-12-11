@@ -1,22 +1,35 @@
-# MAXSwerve Java Template v2023.1
+# Repository Summary
+**This repository contains code for 9430's 2024 Offseason test bot.** 
 
-See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Java-Template/blob/main/CHANGELOG.md) for information about updates to the template that may have been released since you created your project.
+# Resources
+Project based on [MAXSwerve Java Template v2023.1](https://github.com/REVrobotics/MAXSwerve-Java-Template/releases/tag/v2023.1), using plenty of code from our 2024 competition bot code from a C++ code base.
+- [2024 Competition Bot "HPWaffleJet1024"](https://github.com/Cosmonautics/9430-hpwafflejet1024)
+- [Java Version of "HPWaffleJet1024"](https://github.com/Cosmonautics/9430-hpwafflejet1024J)
+- [Off Season General Repo](https://github.com/bbontrager89/off-season) (Contains documentation and setup guides)
+- [Learn Git Commands/Branching here](https://learngitbranching.js.org/)
 
-## Description
+# Style Guide
+This repository follows the conventions and best practices defined below. Please refer to these style guides regularly when writing code or performing code reviews. 
 
-A template project for an FRC swerve drivetrain that uses REV MAXSwerve Modules.
+## Java Conventions
+We follow [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html) as much as possible. (Formatter file TBD)
 
-Note that this is meant to be used with a drivetrain composed of four MAXSwerve Modules, each configured with two SPARKS MAX, a NEO as the driving motor, a NEO 550 as the turning motor, and a REV Through Bore Encoder as the absolute turning encoder.
+## Git Best Practices
+**[Write good commit messages](https://cbea.ms/git-commit/)**
+- Small, focused/effort based commits.
+- Concise summary of changes less than 50 characters in the first line; add description for complex commits less than 72 characters per line.
+- Imperative commit messages (**"do code"** not *"doing code"*).
+- Capitalize commit messages like a normal sentence. 
 
-To get started, make sure you have calibrated the zero offsets for the absolute encoders in the Hardware Client using the `Absolute Encoder` tab under the associated turning SPARK MAX devices.
+**General Repository Conventions**
 
-## Prerequisites
-
-* SPARK MAX Firmware v1.6.2 - Adds features that are required for swerve
-* REVLib v2023.1.2 - Includes APIs for the new firmware features
-
-## Configuration
-
-It is possible that this project will not work for your robot right out of the box. Various things like the CAN IDs, PIDF gains, chassis configuration, etc. must be determined for your own robot!
-
-These values can be adjusted in the `Constants.java` file.
+- Pull Requests are referenced as PR #(ID) and Issues are referenced as simply #(ID) where ID = the ID number of the Issue or Pull Request. 
+- Prefer merging over rebasing. If merging to a working code/staging branch, rebasing is preferable. Rebasing should only be done if the source branch being rebased onto a base branch is no longer going to be worked on. 
+- [Feature-Branch Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
+  - Branch frequently.
+  - Use Pull Requests to merge into working feature branches.
+  - Commit work to feature branch often, then push branch to remote at the end of the day to keep developers in the loop. 
+  - Build code before you commit to avoid committing broken code. Untested code should never be committed to working feature branches.
+    - Working feature branches are defined as feature branches that represent working features.
+    - Issues may exist with otherwise working features, but that doesn't mean those aren't "working feature branches".
+  - Each developer may branch off remote feature branches to commit work into, and rebase those branches onto the remote feature branch via a pull request. 
