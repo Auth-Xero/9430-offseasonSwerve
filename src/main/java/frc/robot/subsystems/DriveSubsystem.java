@@ -6,9 +6,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -67,27 +66,37 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+
     zeroHeading(); // Reset the gyro so we start facing 'forward' as zero degrees.
 
+    RobotConfig config = null;
+    try{
+      config = RobotConfig.fromGUISettings();
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }
     // AutoBuilder is using our pose and drive methods to run autonomous paths.
     // Now, instead of using odometry directly, it uses the pose from poseEstimatorSubsystem.
-    AutoBuilder.configureHolonomic(
-        this::getPose, // We give it a function that returns our current position.
-        this::resetOdometry, // A function to reset our position if needed.
-        this::getRobotRelativeSpeeds, // How fast are we moving relative to the robot?
-        speeds -> driveRobotRelative(speeds), // A function to make us move at certain speeds.
-        new HolonomicPathFollowerConfig(
-            // Some PID constants and robot parameters for following paths
-            new PIDConstants(AutoConstants.kPXController, 0.0, 0.0),
-            new PIDConstants(AutoConstants.kPYController, 0.0, 0.0),
-            4.46,   // Max speed in meters/second
-            0.473,  // Robot radius in meters
-            new ReplanningConfig()
-        ),
-        () -> {
-          return false;
-        },
-        this
+    // Configure AutoBuilder last
+    AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new com.pathplanner.lib.config.PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new com.pathplanner.lib.config.PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
     );
   }
 
