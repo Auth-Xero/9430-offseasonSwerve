@@ -85,9 +85,8 @@ public class DriveSubsystem extends SubsystemBase {
             new ReplanningConfig()
         ),
         () -> {
-          // Check alliance color to maybe mirror paths (red/blue sides differ).
-          // Notice we don't do .get() anymore since getAlliance() returns the alliance directly.
-          return DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+          Alliance alliance = DriverStation.getAlliance().get();
+          return false;
         },
         this
     );
