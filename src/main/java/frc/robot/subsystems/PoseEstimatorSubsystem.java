@@ -32,23 +32,22 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
 
     // These constants describe how much uncertainty we think we have in our measurements.
     // Lower numbers mean we trust that measurement more.
-    private static final double STATE_STD_DEV_POS = 0.05;
-    private static final double STATE_STD_DEV_HEADING = 0.05;
+    private static final double STATE_STD_DEV_POS = 0.03;
+    private static final double STATE_STD_DEV_HEADING = 0.02;
     private static final double VISION_STD_DEV_POS = 0.9;
     private static final double VISION_STD_DEV_HEADING = 0.9;
 
     // If we have multiple cameras, we list their names here.
     //Add as many cameras we plan to use that season
     //TODO: FILL CAMERA NAMES IN PLEASE!!!
-    private static final String[] CAMERA_NAMES = {"CameraFront", "CameraBack"};
+    private static final String[] CAMERA_NAMES = {/*"CameraFront", "CameraBack" */};
 
     // Each camera might be mounted differently on the robot.
     // These transforms describe the camera's position and orientation relative to the robot's center.
-    // Measure this carefully on your actual robot and fill these in.
     private final Transform3d[] robotToCams = {
         //TODO: FILL CAMERA TRANSFORMS IN PLEASE!!!
-        new Transform3d(/* front camera offset */),
-        new Transform3d(/* back camera offset */)
+        //new Transform3d(/* front camera offset */),
+        //new Transform3d(/* front camera offset */)
         //Add as many cameras we plan to use that season
     };
 
