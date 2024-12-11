@@ -21,11 +21,12 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Current;
 import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.units.Measure.*;
+import edu.wpi.first.units.*;
 
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -81,7 +82,9 @@ public class DriveSubsystem extends SubsystemBase {
     zeroHeading(); // Reset the gyro so we start facing 'forward' as zero degrees.
 
     RobotConfig config = new RobotConfig(24.13, 6.883,
-        new ModuleConfig((Distance)0.0362, (LinearVelocity)4.46, 1.2, DCMotor.getNeoVortex(4), (Current)60.0, 4),
+        new ModuleConfig(Units.Meter.of(0.0362).in(Units.Meter),
+            Units.MetersPerSecond.of(4.46).in(Units.MetersPerSecond), 1.2, DCMotor.getNeoVortex(4),
+            Units.Amps.of(60.0).in(Units.Amps), 4),
         new Translation2d[] { new Translation2d(0.286, 0.286), new Translation2d(0.286, -0.286),
             new Translation2d(-0.286, 0.286), new Translation2d(-0.286, -0.286) });
     try {
