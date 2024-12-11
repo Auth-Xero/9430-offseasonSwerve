@@ -78,7 +78,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     PathPlannerPath selectedPath = smartDashboardUtils.pathChooser.getSelected();
 
-    m_robotDrive.resetOdometry(selectedPath.getPreviewStartingHolonomicPose());
+    m_robotDrive.resetOdometry(selectedPath.getStartingHolonomicPose().get());
 
     Command selectedCommand = AutoBuilder.followPath(selectedPath);
 
