@@ -12,10 +12,8 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true,
-    "**/*~": true,
-    "**/.vscode": true
+    "**/*~": true
   },
-  
   "java.test.config": [
     {
       "name": "WPIlibUnitTests",
