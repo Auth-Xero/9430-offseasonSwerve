@@ -75,17 +75,17 @@ public class DriveSubsystem extends SubsystemBase {
     zeroHeading(); // Reset the gyro so we start facing 'forward' as zero degrees.
 
     RobotConfig config = new RobotConfig(24.13, 6.883,
-        new ModuleConfig(Units.Meter.of(0.0362).in(Units.Meter),
-            Units.MetersPerSecond.of(4.46).in(Units.MetersPerSecond), 1.2, DCMotor.getNeoVortex(4),
-            Units.Amps.of(60.0).in(Units.Amps), 4),
-        new Translation2d[] { new Translation2d(0.286, 0.286), new Translation2d(0.286, -0.286),
+        new ModuleConfig(0.0362,
+            4.46, 1.2, DCMotor.getNeoVortex(4),
+            60.0, 4),new Translation2d[] { new Translation2d(0.286, 0.286), new Translation2d(0.286, -0.286),
             new Translation2d(-0.286, 0.286), new Translation2d(-0.286, -0.286) });
     try {
-      config = RobotConfig.fromGUISettings();
+      //config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       // Handle exception as needed
       e.printStackTrace();
     }
+    
     // AutoBuilder is using our pose and drive methods to run autonomous paths.
     // Now, instead of using odometry directly, it uses the pose from
     // poseEstimatorSubsystem.
@@ -115,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
-  public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
+  public void driveRobotRelative(ChassisSpeeds chassisSpeeds) { 
     // Drive the robot at the given speeds relative to itself (not the field).
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
@@ -301,4 +301,5 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getPosition()
     };
   }
+
 }
