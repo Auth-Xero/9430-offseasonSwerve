@@ -10,7 +10,6 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -19,11 +18,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import frc.utils.SwerveUtils;
 
 public class DriveSubsystem extends SubsystemBase {
   // Each of these is one of our swerve modules (the wheels + motors that can spin
@@ -51,16 +47,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   // This is our gyro sensor. It tells us which way the robot is facing.
   private final Pigeon2 pigeon = new Pigeon2(DriveConstants.pigeon2CanId);
-
-  // These variables and limiters help us gently ramp up/down speeds to avoid
-  // jerky motion.
-  private double m_currentRotation = 0.0;
-  private double m_currentTranslationDir = 0.0;
-  private double m_currentTranslationMag = 0.0;
-
-  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
-  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
-  private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   // The PoseEstimatorSubsystem is like a fancy brain that combines odometry
   // (where the wheels think we are)
@@ -117,8 +103,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void driveRobotRelative(ChassisSpeeds chassisSpeeds) { 
     // Drive the robot at the given speeds relative to itself (not the field).
-    ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(chassisSpeeds, 0.02);
-    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
+    chassisSpeeds.discretize(0.02);
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     setModuleStates(swerveModuleStates);
   }
@@ -163,81 +149,19 @@ public class DriveSubsystem extends SubsystemBase {
    * false means the stick directions are relative to the robot's front.
    * rateLimit = true tries to smooth out sudden changes in direction.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
-    double xSpeedCommanded;
-    double ySpeedCommanded;
-
-    if (rateLimit) {
-      // Convert from x,y to polar form to apply rate limits more naturally (limit how
-      // fast direction changes).
-      double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
-      double inputTranslationMag = Math.sqrt(xSpeed * xSpeed + ySpeed * ySpeed);
-
-      // We dynamically decide how fast we can change directions based on how fast
-      // we're currently going.
-      double directionSlewRate;
-      if (m_currentTranslationMag != 0.0) {
-        directionSlewRate = Math.abs(DriveConstants.kDirectionSlewRate / m_currentTranslationMag);
-      } else {
-        directionSlewRate = 500.0; // If we're barely moving, we can turn quickly.
-      }
-
-      double currentTime = WPIUtilJNI.now() * 1e-6;
-      double elapsedTime = currentTime - m_prevTime;
-      double angleDif = SwerveUtils.AngleDifference(inputTranslationDir, m_currentTranslationDir);
-
-      // We slowly adjust the direction and magnitude of our travel to avoid jerky
-      // starts/stops.
-      if (angleDif < 0.45 * Math.PI) {
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(
-            m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
-        m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
-      } else if (angleDif > 0.85 * Math.PI) {
-        // If we want to reverse direction suddenly, we handle that by slowing down
-        // first, then flipping direction.
-        if (m_currentTranslationMag > 1e-4) {
-          m_currentTranslationMag = m_magLimiter.calculate(0.0);
-        } else {
-          m_currentTranslationDir = SwerveUtils.WrapAngle(m_currentTranslationDir + Math.PI);
-          m_currentTranslationMag = m_magLimiter.calculate(inputTranslationMag);
-        }
-      } else {
-        // If the angle difference is moderate, we rotate towards it and slow down a
-        // bit.
-        m_currentTranslationDir = SwerveUtils.StepTowardsCircular(
-            m_currentTranslationDir, inputTranslationDir, directionSlewRate * elapsedTime);
-        m_currentTranslationMag = m_magLimiter.calculate(0.0);
-      }
-
-      m_prevTime = currentTime;
-
-      xSpeedCommanded = m_currentTranslationMag * Math.cos(m_currentTranslationDir);
-      ySpeedCommanded = m_currentTranslationMag * Math.sin(m_currentTranslationDir);
-      m_currentRotation = m_rotLimiter.calculate(rot);
-
-    } else {
-      // If rate limiting is off, just use the given speeds as-is.
-      xSpeedCommanded = xSpeed;
-      ySpeedCommanded = ySpeed;
-      m_currentRotation = rot;
-    }
-
-    // Scale the joystick input (which is likely -1 to 1) into actual meters/second
-    // and radians/second.
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
-
-    // Convert these speeds into actual states for each swerve module.
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    // Convert the commanded speeds into the correct units for the drivetrain
+    double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
+    double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
+    double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
+    //TODO: FIX TO USE TO ROBOT RELATIVE SPEEDS
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                xSpeedDelivered, ySpeedDelivered, rotDelivered, pigeon.getRotation2d())
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
+                pigeon.getRotation2d())
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-
-    // Command each swerve module to achieve the desired speed and direction.
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
