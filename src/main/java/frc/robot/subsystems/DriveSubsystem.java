@@ -64,15 +64,16 @@ public class DriveSubsystem extends SubsystemBase {
     RobotConfig config = new RobotConfig(24.13, 6.883,
         new ModuleConfig(0.0362,
             4.46, 1.2, DCMotor.getNeoVortex(4),
-            60.0, 4),new Translation2d[] { new Translation2d(0.286, 0.286), new Translation2d(0.286, -0.286),
+            60.0, 4),
+        new Translation2d[] { new Translation2d(0.286, 0.286), new Translation2d(0.286, -0.286),
             new Translation2d(-0.286, 0.286), new Translation2d(-0.286, -0.286) });
     try {
-      //config = RobotConfig.fromGUISettings();
+      // config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       // Handle exception as needed
       e.printStackTrace();
     }
-    
+
     // AutoBuilder is using our pose and drive methods to run autonomous paths.
     // Now, instead of using odometry directly, it uses the pose from
     // poseEstimatorSubsystem.
@@ -86,7 +87,8 @@ public class DriveSubsystem extends SubsystemBase {
                                                               // module feedforwards
         new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
                                         // drive trains
-            new com.pathplanner.lib.config.PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID constants
+            new com.pathplanner.lib.config.PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID
+                                                                                                // constants
             new com.pathplanner.lib.config.PIDConstants(AutoConstants.kPYController, 0.0, 0.0) // Rotation PID constants
         ),
         config, // The robot configuration
@@ -102,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
-  public void driveRobotRelative(ChassisSpeeds chassisSpeeds) { 
+  public void driveRobotRelative(ChassisSpeeds chassisSpeeds) {
     // Drive the robot at the given speeds relative to itself (not the field).
     chassisSpeeds.discretize(0.02);
     SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
@@ -155,12 +157,11 @@ public class DriveSubsystem extends SubsystemBase {
     double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
-    //TODO: FIX TO USE TO ROBOT RELATIVE SPEEDS
-    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-        fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                pigeon.getRotation2d())
-            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
+    if(fieldRelative){
+      chassisSpeeds.toFieldRelativeSpeeds(pigeon.getRotation2d());
+    }
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
