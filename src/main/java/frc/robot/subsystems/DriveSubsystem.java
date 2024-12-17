@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.AutoConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // Each of these is one of our swerve modules (the wheels + motors that can spin
@@ -85,8 +86,8 @@ public class DriveSubsystem extends SubsystemBase {
                                                               // module feedforwards
         new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
                                         // drive trains
-            new com.pathplanner.lib.config.PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-            new com.pathplanner.lib.config.PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            new com.pathplanner.lib.config.PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // Translation PID constants
+            new com.pathplanner.lib.config.PIDConstants(AutoConstants.kPYController, 0.0, 0.0) // Rotation PID constants
         ),
         config, // The robot configuration
         () -> {
