@@ -11,6 +11,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.utils.SmartDashboardUtils;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -76,6 +77,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    try{
     PathPlannerPath selectedPath = smartDashboardUtils.pathChooser.getSelected();
 
     m_robotDrive.resetOdometry(selectedPath.getStartingHolonomicPose().get());
@@ -83,6 +85,10 @@ public class RobotContainer {
     Command selectedCommand = AutoBuilder.followPath(selectedPath);
 
     return selectedCommand;
+    } catch(Exception e) {
+      e.printStackTrace();
+    }
+    return Commands.none();
   }
 
 }
