@@ -13,7 +13,8 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/DriveSubsystem": "Subsystem",
       "/LiveWindow/Ungrouped/Pigeon 2 (v6) [0]": "Gyro",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/SmartDashboard/Path Chooser": "String Chooser"
     }
   },
   "NetworkTables": {
