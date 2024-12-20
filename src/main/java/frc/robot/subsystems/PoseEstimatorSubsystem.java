@@ -12,6 +12,10 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -40,14 +44,14 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
     // If we have multiple cameras, we list their names here.
     //Add as many cameras we plan to use that season
     //TODO: FILL CAMERA NAMES IN PLEASE!!!
-    private static final String[] CAMERA_NAMES = {"Arducam_1","Arducam_3"/*"CameraFront", "CameraBack" */};
+    private static final String[] CAMERA_NAMES = {"Arducam_1", "Arducam_3"/*"CameraFront", "CameraBack" */};
 
     // Each camera might be mounted differently on the robot.
     // These transforms describe the camera's position and orientation relative to the robot's center.
     private final Transform3d[] robotToCams = {
         //TODO: FILL CAMERA TRANSFORMS IN PLEASE!!!
-        //new Transform3d(/* front camera offset */),
-        //new Transform3d(/* front camera offset */)
+        new Transform3d(/* front camera offset */),
+        new Transform3d(/* front camera offset */)
         //Add as many cameras we plan to use that season
     };
 
@@ -75,7 +79,11 @@ public class PoseEstimatorSubsystem extends SubsystemBase {
                     PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                     robotToCams[i]
                 );
+                
+
             }
+            
+
         } else {
             // If no field layout, we still create cameras but won't be able to run the pose estimator from them.
             for (int i = 0; i < CAMERA_NAMES.length; i++) {
